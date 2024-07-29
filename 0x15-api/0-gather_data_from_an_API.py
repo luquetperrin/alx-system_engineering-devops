@@ -43,4 +43,3 @@ if __name__ == '__main__':
     for todo in todo_result:
         if todo.get("completed"):
             print(f"\t {todo.get('title')}")
-
