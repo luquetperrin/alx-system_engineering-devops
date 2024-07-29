@@ -5,15 +5,19 @@ from json import dump
 from requests import get
 from sys import argv
 
+
 def fetch_json(url):
     """Fetch JSON data from a URL and handle potential errors."""
+    
     try:
         response = get(url)
         response.raise_for_status()  # Raises an HTTPError for bad responses
         return response.json()
+    
     except Exception as e:
         print(f"Error fetching data from {url}: {e}")
         return None
+
 
 if __name__ == "__main__":
     users_url = "https://jsonplaceholder.typicode.com/users"
@@ -24,6 +28,7 @@ if __name__ == "__main__":
         exit(1)
 
     big_dict = {}
+    
     for user in users_result:
         todo_list = []
         user_id = user.get("id")
