@@ -1,24 +1,50 @@
-import json
+#!/usr/bin/python3
+"""Fetches information from JSONPlaceholder API and exports to JSON"""
 
-# Sample data for demonstration purposes
-tasks = {
-    "1": [
-        {"username": "Bret", "task": "delectus aut autem", "completed": False},
-        {"username": "Bret", "task": "quis ut nam facilis et officia qui", "completed": False},
-        # Add more tasks as needed
-    ],
-    "2": [
-        {"username": "Antonette", "task": "suscipit repellat esse quibusdam voluptatem incidunt", "completed": False},
-        # Add more tasks as needed
-    ]
-    # Add more users and their tasks as needed
-}
+from json import dump
+from requests import get
+from sys import argv
 
-# File name for the JSON file
-file_name = "todo_all_employees.json"
+def fetch_json(url):
+    """Fetch JSON data from a URL and handle potential errors."""
+    try:
+        response = get(url)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        return response.json()
+    except Exception as e:
+        print(f"Error fetching data from {url}: {e}")
+        return None
 
-# Write the data to the JSON file
-with open(file_name, 'w') as file:
-    json.dump(tasks, file, indent=4)
+if __name__ == "__main__":
+    users_url = "https://jsonplaceholder.typicode.com/users"
+    users_result = fetch_json(users_url)
 
-print(f"Data has been written to {file_name}")
+    if users_result is None:
+        print("Failed to fetch users.")
+        exit(1)
+
+    big_dict = {}
+    for user in users_result:
+        todo_list = []
+        user_id = user.get("id")
+        username = user.get("username")
+
+        todos_url = f"https://jsonplaceholder.typicode.com/users/{user_id}/todos"
+        todo_result = fetch_json(todos_url)
+
+        if todo_result is None:
+            print(f"Failed to fetch todos for user ID {user_id}.")
+            continue
+
+        for todo in todo_result:
+            todo_dict = {
+                "username": username,
+                "task": todo.get("title"),
+                "completed": todo.get("completed")
+            }
+            todo_list.append(todo_dict)
+
+        big_dict[user_id] = todo_list
+
+    with open("todo_all_employees.json", 'w') as f:
+        dump(big_dict, f, indent=4)
