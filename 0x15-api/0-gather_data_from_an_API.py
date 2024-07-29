@@ -33,7 +33,9 @@ if __name__ == '__main__':
         exit(1)
 
     todo_num = len(todo_result)
-    todo_complete = len([todo for todo in todo_result if todo.get("completed")])
+    todo_complete = len(
+        [todo for todo in todo_result if todo.get("completed")]
+    )
     name = name_result.get("name")
     
     print(f"Employee {name} is done with tasks({todo_complete}/{todo_num}):")
