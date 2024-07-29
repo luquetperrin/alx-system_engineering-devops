@@ -10,7 +10,7 @@ if __name__ == '__main__':
     if len(argv) != 2:
         print("Usage: ./0-gather_data_from_an_API.py <employee_id>")
         exit(1)
-    
+
     try:
         employee_id = int(argv[1])
     except ValueError:
@@ -20,7 +20,7 @@ if __name__ == '__main__':
     main_url = 'https://jsonplaceholder.typicode.com'
     todo_url = f"{main_url}/users/{employee_id}/todos"
     name_url = f"{main_url}/users/{employee_id}"
-    
+
     try:
         todo_result = get(todo_url).json()
         name_result = get(name_url).json()
@@ -37,8 +37,9 @@ if __name__ == '__main__':
         [todo for todo in todo_result if todo.get("completed")]
     )
     name = name_result.get("name")
-    
+
     print(f"Employee {name} is done with tasks({todo_complete}/{todo_num}):")
     for todo in todo_result:
         if todo.get("completed"):
             print(f"\t {todo.get('title')}")
+
