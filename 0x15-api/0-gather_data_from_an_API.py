@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Uses the JSON placeholder API to query data about an employee's TODO list progress.
+Uses the JSON placeholder API to query data about an employee's TODO list
+progress.
 """
 
 from requests import get
